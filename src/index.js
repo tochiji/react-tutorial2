@@ -4,58 +4,45 @@ import './index.css';
 // import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-function formatDate(date) {
-  return date.toLocaleDateString();
-}
+class Clock extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {
+      date: new Date(),
+      players: ["石原","山田"],
+      playerNow: 0
+    }
+  }
 
-function Avatar(props) {
-  return (
-    <img className="Avatar"
-      src={props.user.avatarUrl}
-      alt={props.user.name}
-    />
+  componentDidMount(){
+    this.timerID = setInterval(
+      ()=> this.tick()
+    ,1000
+    )
+  }
 
-  );
-}
+  componentWillUnmount(){
+    clearInterval(this.timeID);
+  }
 
-function UserInfo(props) {
-  return (
-    <div className="UserInfo">
-      <Avatar user={props.user} />
-      <div className="UserInfo-name">
-        {props.user.name}
+  tick(){
+    this.setState({date: new Date()})
+    this.setState({playerNow: this.state.playerNow === 0 ? 1 : 0})
+  }
+
+  render(){
+    const player = this.state.players[this.state.playerNow]
+    return (
+      <div>
+        <h1>Hello, World!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+        <h3>the Player is {player}</h3>
       </div>
-    </div>
-  );
+    )
+  }
 }
 
-function Comment(props) {
-  return (
-    <div className="Comment">
-      <UserInfo user={props.author} />
-      <div className="Comment-text">
-        {props.text}
-      </div>
-      <div className="Comment-date">
-        {formatDate(props.date)}
-      </div>
-    </div>
-  );
-}
-
-const comment = {
-  date: new Date(),
-  text: 'I hope you enjoy learning React!',
-  author: {
-    name: 'Hello Kitty',
-    avatarUrl: 'https://placekitten.com/g/64/64',
-  },
-};
-
-ReactDOM.render(
-  <Comment author={comment.author} text={comment.text} date={comment.date} />,
-  document.getElementById('root')
-);
+ReactDOM.render(<Clock />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
