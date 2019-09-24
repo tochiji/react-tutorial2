@@ -4,28 +4,74 @@ import './index.css';
 // import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-class Toggle extends React.Component {
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
+}
+
+function GuestGreeting(props) {
+  return <h1>Please sign up.</h1>;
+}
+
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn;
+  if (isLoggedIn) {
+    return <UserGreeting />;
+  }
+  return <GuestGreeting />;
+}
+
+function LoginButton(props){
+  return (
+  <button onClick={props.onClick}>
+    Login
+  </button>
+  )
+}
+
+function LogoutButton(props){
+  return (
+  <button onClick={props.onClick}>
+    Logout
+  </button>
+  )
+}
+
+
+class LoginControl extends React.Component{
   constructor(props){
-    super(props)
-    this.state = {isToggleOn: true}
+    super(props);
+    this.state = {isLoggedIn:false};
   }
 
-  handleClick = ()=>{
-    this.setState(state => ({
-      isToggleOn: !state.isToggleOn
-    }))
+  handleLoginClick = () => {
+    this.setState({isLoggedIn:true});
   }
+
+  handleLogoutClick = () => {
+    this.setState({isLoggedIn:false});
+  } 
 
   render(){
+    const isLoggedIn = this.state.isLoggedIn;
+    let button;
+
+    if(isLoggedIn){
+      button = <LogoutButton onClick={this.handleLogoutClick} />
+    } else {
+      button = <LoginButton onClick={this.handleLoginClick} />
+    }
     return (
-      <button onClick={this.handleClick}>
-        {this.state.isToggleOn ? 'ON': 'OFF'}
-      </button>
+      <div>
+        <Greeting isLoggedIn={isLoggedIn} />
+        {button}
+      </div>
     )
   }
 }
 
-ReactDOM.render(<Toggle />, document.getElementById('root'));
+ReactDOM.render(
+  <LoginControl />,document.getElementById('root')
+)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
