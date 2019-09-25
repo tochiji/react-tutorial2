@@ -1,98 +1,44 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-function UserGreeting(props) {
-  return <h1>Welcome back!</h1>;
-}
-
-function GuestGreeting(props) {
-  return <h1>Please sign up.</h1>;
-}
-
-function Greeting(props) {
-  const isLoggedIn = props.isLoggedIn;
-  if (isLoggedIn) {
-    return <UserGreeting />;
+function WarningBanner(props) {
+  if(!props.warn){
+    return null;
   }
-  return <GuestGreeting />;
+  return(
+    <div className="warning">
+      Warning!
+    </div>
+  );
 }
 
-function LoginButton(props){
-  return (
-  <button onClick={props.onClick}>
-    Login
-  </button>
-  )
-}
-
-function LogoutButton(props){
-  return (
-  <button onClick={props.onClick}>
-    Logout
-  </button>
-  )
-}
-
-
-class LoginControl extends React.Component{
+class Page extends React.Component{
   constructor(props){
     super(props);
-    this.state = {isLoggedIn:false};
+    this.state = {showWarning:true};
   }
 
-  handleLoginClick = () => {
-    this.setState({isLoggedIn:true});
+  handleToggleClick = () =>{
+    this.setState(state => ({
+      showWarning: !state.showWarning
+    }));
   }
-
-  handleLogoutClick = () => {
-    this.setState({isLoggedIn:false});
-  } 
 
   render(){
-    const isLoggedIn = this.state.isLoggedIn;
-    let button;
-
-    if(isLoggedIn){
-      button = <LogoutButton onClick={this.handleLogoutClick} />
-    } else {
-      button = <LoginButton onClick={this.handleLoginClick} />
-    }
     return (
       <div>
-        <Greeting isLoggedIn={isLoggedIn} />
-        {button}
+        <WarningBanner warn={this.state.showWarning} />
+        <button onClick={this.handleToggleClick}>
+          {this.state.showWarning ? 'Hide' : 'Show'}
+        </button>
       </div>
     )
   }
 }
 
-// ReactDOM.render(
-//   <LoginControl />,document.getElementById('root')
-// )
-
-function Mailbox(props){
-  const unreadMessages = props.unreadMessages;
-  return (
-    <div>
-      <h1>Hello!</h1>
-      {unreadMessages.length > 0 &&
-        <h2>
-          You have {unreadMessages.length} unread messages.
-        </h2>
-      }
-    </div>
-  )
-}
-
-// const messages = ['React', 'Re: React', 'Re:Re: React'];
-const messages = [];
-ReactDOM.render(
-  <Mailbox unreadMessages={messages} />,
-  document.getElementById('root')
-);
+ReactDOM.render(<Page />,document.getElementById('root'))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
