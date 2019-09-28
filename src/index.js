@@ -65,8 +65,41 @@ class EssayForm extends React.Component{
   }
 }
 
+class FlavorForm extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = { value: ['ハズレ','coconutだね']};
+  }
+  handleChange = (event) =>{
+    const value = this.state.value.splice();
+    value.push(event.target.value)
+    this.setState({value:value});
+  }
+  handleSubmit = (event) =>{
+    alert('あなたの好きな味は' + this.state.value);
+    event.preventDefault();
+  }
+
+  render(){
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Pick your favorite flavor:
+          <select multiple value={this.state.value} onChange={this.handleChange}>
+            <option value="ハズレ">Grapefruit</option>
+            <option value="limeやね">Lime</option>
+            <option value="coconutだね">Coconut</option>
+            <option value="mangoだね">Mango</option>
+          </select>
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    )
+  }
+}
+
 ReactDOM.render(
-  <EssayForm />,
+  <FlavorForm />,
   document.getElementById('root')
 )
 
