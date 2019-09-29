@@ -1,0 +1,13 @@
+extends:
+  - standard
+  - plugin:react/recommended
+plugins:
+  - react
+rules:
+  react/prop-types:
+    - 0
+  prettier/prettier:
+    - error
+settings:
+  react:
+    version: 16.9 # Reactのバージョン
