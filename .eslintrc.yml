@@ -2,13 +2,14 @@
 extends:
   - standard
   - plugin:react/recommended
+  - prettier
 plugins:
   - react
 rules:
+  space-before-function-paren:
+    - 0
   react/prop-types:
     - 0
-  prettier/prettier:
-    - error
 settings:
   react:
     version: 16.9 # Reactのバージョン
