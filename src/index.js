@@ -3,90 +3,56 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import * as serviceWorker from './serviceWorker'
 
-function BoilingVerdict(props) {
-  if (props.celsius >= 100) {
-    return <p>The water would boil.</p>
-  }
-  return <p>The water would not boil.</p>
+const d = [
+  { category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football' },
+  { category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball' },
+  { category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball' },
+  { category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch' },
+  { category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5' },
+  { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' },
+]
+
+function FilterableProductTable(props){
+  return (
+    <div>
+      <SearchBar />
+      <ProductTable products={props.products} />
+    </div>
+  )
 }
 
-function toCelsius(faherenheit) {
-  return ((faherenheit - 32) * 5) / 9
+function SearchBar(){
+  return (
+    <div>
+      <input type="text" /><br />
+      <input type="checkbox" value="show" />
+        Only show products in stock
+    </div>
+  )
 }
 
-function toFahrenheit(celsius) {
-  return (celsius * 9) / 5 + 32
+function ProductTable(props){
+  console.log(props.products)
+  const categories = Array.from(new Set(props.products.map(v=>{
+    return v.category
+  })))
+  const categoryList = categories.map(c=>
+    <ProductCategoryRow key={c} name={c} />
+  )
+  return (
+    <div>
+      Name price
+      {categoryList}
+    </div>
+  )
 }
 
-function tryConvert(temperature, convert) {
-  const input = parseFloat(temperature)
-  if (Number.isNaN(input)) {
-    return ''
-  }
-  const output = convert(input)
-  const rounded = Math.round(output * 100) / 1000
-  return rounded.toString()
+function ProductCategoryRow(props){
+  return <div>{props.name}</div>
 }
 
-const scaleNames = {
-  c: 'Celsius',
-  f: 'Fahrenheit',
-}
-
-class Calclator extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { temperature: '', scale: 'c' }
-  }
-
-  handleCelsiusChange = temperature => {
-    this.setState({ scale: 'c', temperature })
-  }
-
-  handleFahrenheitChange = temperature => {
-    this.setState({ scale: 'f', temperature })
-  }
-
-  render() {
-    const scale = this.state.scale
-    const temperature = this.state.temperature
-    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature
-    const fahrenheit = scale == 'c' ? tryConvert(temperature, toFahrenheit) : temperature
-
-    return (
-      <div>
-        <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />
-        <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange} />
-
-        <BoilingVerdict celsius={parseFloat(celsius)} />
-      </div>
-    )
-  }
-}
-
-class TemperatureInput extends React.Component {
-  constructor(props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange(e) {
-    this.props.onTemperatureChange(e.target.value)
-  }
-
-  render() {
-    const temperature = this.props.temperature
-    const scale = this.props.scale
-    return (
-      <fieldset>
-        <legend>Enter temperature in {scaleNames[scale]}</legend>
-        <input value={temperature} onChange={this.handleChange} />
-      </fieldset>
-    )
-  }
-}
-
-ReactDOM.render(<Calclator />, document.getElementById('root'))
+const mount = document.getElementById('root')
+ReactDOM.render(<FilterableProductTable products={d} />, mount)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
