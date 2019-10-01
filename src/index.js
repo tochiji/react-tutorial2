@@ -12,7 +12,7 @@ const d = [
   { category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7' },
 ]
 
-function FilterableProductTable(props){
+function FilterableProductTable(props) {
   return (
     <div>
       <SearchBar />
@@ -21,24 +21,32 @@ function FilterableProductTable(props){
   )
 }
 
-function SearchBar(){
+function SearchBar() {
   return (
     <div>
-      <input type="text" /><br />
+      <input type="text" />
+      <br />
       <input type="checkbox" value="show" />
-        Only show products in stock
+      Only show products in stock
     </div>
   )
 }
 
-function ProductTable(props){
+function ProductTable(props) {
   console.log(props.products)
-  const categories = Array.from(new Set(props.products.map(v=>{
-    return v.category
-  })))
-  const categoryList = categories.map(c=>
-    <ProductCategoryRow key={c} name={c} />
+  const categories = Array.from(
+    new Set(
+      props.products.map(v => {
+        return v.category
+      })
+    )
   )
+  const categoryList = categories.map(c => (
+    <div key={c}>
+      <ProductCategoryRow name={c} />
+      <ProductRow category={c} products={props.products} />
+    </div>
+  ))
   return (
     <div>
       Name price
@@ -47,8 +55,23 @@ function ProductTable(props){
   )
 }
 
-function ProductCategoryRow(props){
+function ProductCategoryRow(props) {
   return <div>{props.name}</div>
+}
+
+function ProductRow(props) {
+  const category = props.category
+  const products = props.products
+    .filter(p => {
+      return p.category === category
+    })
+    .map(v => (
+      <div key={category}>
+        <span>{v.name}</span>
+        <span>{v.price}</span>
+      </div>
+    ))
+  return products
 }
 
 const mount = document.getElementById('root')
