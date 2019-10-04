@@ -5,11 +5,16 @@ extends:
   - prettier
 plugins:
   - react
+  - react-hooks
 rules:
   space-before-function-paren:
     - 0
   react/prop-types:
     - 0
+  react-hooks/rules-of-hooks:
+    - error
+  react-hooks/exhaustive-deps:
+    - warn
 settings:
   react:
     version: 16.9 # Reactのバージョン
